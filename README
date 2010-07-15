@@ -1,0 +1,25 @@
+Combo Script - 自动合并/压缩脚本 
+ 
+ * Created by 李晶-拔赤(lijing00333@163.com)
+ * License: http://www.opensource.org/licenses/mit-license.php
+
+脚本使用:
+ - 要求php5及以上版本
+ - 程序在找不到本地文件的情况下，会去指定的cdn上找同名文件
+ - 需要定义combo.php和minify.php中的$YOUR_CDN变量
+ - 如果只是合并压缩local文件，则不必重置$YOUR_CDN变量
+
+合并文件
+ - http://yourdomain.com/combo.php?app/js/1.js&app/js/2.js
+
+合并压缩
+ - http://yourdomain.com/minify.php?app/js/1.js&app/js/2.js
+
+文件列表：
+ - combo.php 合并文件，不压缩
+ - minify.php 合并压缩文件
+ - cssmin.php 压缩css
+ - jsmin.php 压缩js
+
+文件编码统一使用utf-8
+
