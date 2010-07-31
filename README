@@ -8,6 +8,7 @@ Combo Script - 自动合并/压缩脚本
  - 程序在找不到本地文件的情况下，会去指定的cdn上找同名文件
  - 需要定义combo.php和minify.php中的$YOUR_CDN变量
  - 如果只是合并压缩local文件，则不必重置$YOUR_CDN变量
+ - 这里提供cb.php，用来实现tbcdn的开发环境的模拟,apache的配置在cb.php中
 
 合并文件
  - http://yourdomain.com/combo.php?app/js/1.js&app/js/2.js
@@ -15,11 +16,16 @@ Combo Script - 自动合并/压缩脚本
 合并压缩
  - http://yourdomain.com/minify.php?app/js/1.js&app/js/2.js
 
+模拟淘宝CDN
+ - http://a.tbcdn.cn/??1.js,2.js
+ - http://a.tbcdn.cn/subdir/??1/js,2.js
+
 文件列表：
  - combo.php 合并文件，不压缩
  - minify.php 合并压缩文件
  - cssmin.php 压缩css
  - jsmin.php 压缩js
+ - cb.php 淘宝CDN合并文件策略的模拟
 
 文件编码统一使用utf-8
 
