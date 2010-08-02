@@ -33,7 +33,7 @@ $CDN = 'http://a.tbcdn.cn/';
  * 拔赤 - lijine00333@163.com
  */
 
-//抓取文件
+//抓取文件,如果服务器不支持file直接取远端文件，使用curl
 function get_contents($url){
     $ch =curl_init($url);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
@@ -98,6 +98,10 @@ foreach ($files as $k) {
 		array(''),
 		$k);
 
+	if(!preg_match('/(\.js|\.css)$/',$k)){
+		continue;
+	}
+
     if(empty($type)) {
 		$type = get_extend($k);
     }
@@ -106,7 +110,7 @@ foreach ($files as $k) {
 		$R_files[] = file_get_contents($k);
     }else{
 		//文件不存在
-		$R_files[] = '/***** http://a.tbcdn.cn/'.$k.' *****/';
+		$R_files[] = '/***** '.$CDN.$k.' *****/';
 		$R_files[] = join('',file($CDN.$k));
     }
 }
