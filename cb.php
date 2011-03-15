@@ -7,33 +7,10 @@ $CDN = 'http://a.tbcdn.cn/';
 /**
  * combo.php
  * 只处理\?\?.+的情况
- * apache conf
- *	 <VirtualHost *:80>
- *		ServerAdmin webmaster@dummy-host.example.com
- *		DocumentRoot "D:/dev/a.tbcdn.cn/"
- *		ServerName a.tbcdn.cn
- *
- *		RewriteEngine On
- *		RewriteCond %{QUERY_STRING} ^\?.*\.(js|css)$ [NC]
- *		RewriteRule ^/(.*)$ /cb.php?%{REQUEST_URI} [QSA,L,NS]
- *
- *		RewriteCond D:/dev/a.tbcdn.cn/%{REQUEST_FILENAME} !-F
- *		RewriteRule ^/(.+)$ http://a.tbcdn.cn/$1 [QSA,P,L]
- *
- *		<Directory D:/dev/a.tbcdn.cn/>
- *		Order deny,allow
- *			Allow from All
- *		</Directory>
- *		<IfModule expires_module>
- *			ExpiresActive On
- *			ExpiresDefault "access plus 10 years"
- *		</IfModule>
- *	</VirtualHost>
- *
  * 拔赤 - lijine00333@163.com
  */
 
-//抓取文件,如果服务器不支持file直接取远端文件，使用curl
+//抓取文件
 function get_contents($url){
     $ch =curl_init($url);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
@@ -94,12 +71,20 @@ $R_files = array();
 
 foreach ($files as $k) {
 	$k = preg_replace(
-		array('/^\//'),
-		array(''),
+		array('/^\//','/\?.+$/','/-min\./'),
+		array('','','.'),
 		$k);
-
+	//最后可能是一个逗号
 	if(!preg_match('/(\.js|\.css)$/',$k)){
 		continue;
+	}
+
+	while(preg_match('/[^\/]+\/\.\.\//',$k)){
+
+		$k = preg_replace(
+			array('/[^\/]+\/\.\.\//'),
+			array(''),
+			$k,1);
 	}
 
     if(empty($type)) {
@@ -110,11 +95,12 @@ foreach ($files as $k) {
 		$R_files[] = file_get_contents($k);
     }else{
 		//文件不存在
-		$R_files[] = '/***** '.$CDN.$k.' *****/';
-		$R_files[] = join('',file($CDN.$k));
+		try{
+			$R_files[] = '/***** http://a.tbcdn.cn/'.$k.' *****/';
+			$R_files[] = join('',file($CDN.$k));
+		}catch(Exception $e){}
     }
 }
-
 //添加过期头
 header("Expires: " . date("D, j M Y H:i:s", strtotime("now + 10 years")) ." GMT");
 //文件类型
@@ -123,4 +109,5 @@ header($header[$type]);
 $result = join("\n",$R_files);
 //输出文件
 echo $result;
+//echo 1;
 ?>

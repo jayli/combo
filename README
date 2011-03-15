@@ -6,6 +6,7 @@ Combo Script - 自动合并/压缩脚本
 脚本使用:
  - 要求php5及以上版本
  - 程序在找不到本地文件的情况下，会去指定的cdn上找同名文件
+ - 程序会自动转义-min文件为源文件，因此要约定-min文件和原文件要成对出现
  - 需要定义combo.php和minify.php中的$YOUR_CDN变量
  - 如果只是合并压缩local文件，则不必重置$YOUR_CDN变量
  - 这里提供cb.php，用来实现tbcdn的开发环境的模拟,apache的配置在cb.php中
