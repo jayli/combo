@@ -137,7 +137,7 @@ if (isset($request_headers['If-Modified-Since']) && (strtotime($request_headers[
 } 
 
 // 拼接文件，并应用通用规则
-foreach ($files as $k) {
+foreach ($a_files as $k) {
 
     if(empty($type)) {
 		$type = get_extend($k);
