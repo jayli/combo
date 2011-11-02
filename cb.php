@@ -13,7 +13,7 @@
 $CDN = 'http://assets.taobaocdn.com/'; //如果是在服务器上配置的话，则打开这一句的注释
  
 //读到-min文件时会转读源文件，这些文件除外
-$exp = '/(calendar-pkg-min|editor-pkg-min|editor-plugin-pkg-min|kissy-min|simplecalendar-min|sizzle-pkg-min|list-min|base-pkg-min|jstorage-pkg-min)/';
+$exp = '/(editor-min|editor-core-pkg-min|calendar-pkg-min|editor-pkg-min|editor-plugin-pkg-min|kissy-min|simplecalendar-min|sizzle-pkg-min|list-min|base-pkg-min|jstorage-pkg-min)/';
  
  
 //抓取文件
@@ -138,29 +138,7 @@ if (isset($request_headers['If-Modified-Since']) && (strtotime($request_headers[
 
 // 拼接文件，并应用通用规则
 foreach ($files as $k) {
-	//将开头的/和?去掉
-	$k = preg_replace(
-		array('/^\//','/\?.+$/'),
-		array('',''),
-		$k);
-	if(!preg_match($exp,$k)){		
-		$k = preg_replace(
-			array('/-min\./'),
-			array('.'),
-			$k);
-	}
- 
-	//最后可能是一个逗号
-	if(!preg_match('/(\.js|\.css)$/',$k)){
-		continue;
-	}
-	while(preg_match('/[^\/]+\/\.\.\//',$k)){
-		$k = preg_replace(
-			array('/[^\/]+\/\.\.\//'),
-			array(''),
-			$k,1);
-	}
- 
+
     if(empty($type)) {
 		$type = get_extend($k);
     }
@@ -170,10 +148,11 @@ foreach ($files as $k) {
 		$R_files[] = file_get_contents($k);
     }else{
 		//文件不存在
-		try{//php4不支持try catch，如果基于php4的话，删掉try catch语句
+		try{
+			//php4不支持try catch，如果基于php4的话，删掉try catch语句
 			$R_files[] = '/***** http://a.tbcdn.cn/'.$k.' *****/';
 			$R_files[] = join('',file($CDN.$k));
-                        //$R_files[] = join('', get_contents($CDN.$k)); //如果apache不支持file抓取远程文件，打开这个注释，然后注释掉上一句
+			//$R_files[] = join('', get_contents($CDN.$k)); //如果apache不支持file抓取远程文件，打开这个注释，然后注释掉上一句
 		}catch(Exception $e){}
     }
 }
