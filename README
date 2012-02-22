@@ -28,5 +28,5 @@ Combo Script - 自动合并/压缩脚本
  - jsmin.php 压缩js
  - cb.php 淘宝CDN合并文件策略的模拟
 
-文件编码统一使用utf-8
+php文件编码统一使用utf-8
 

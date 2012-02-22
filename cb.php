@@ -13,7 +13,8 @@
 $CDN = 'http://assets.taobaocdn.com/'; //如果是在服务器上配置的话，则打开这一句的注释
  
 //读到-min文件时会转读源文件，这些文件除外
-$exp = '/(editor-min|editor-core-pkg-min|calendar-pkg-min|editor-pkg-min|editor-plugin-pkg-min|kissy-min|simplecalendar-min|sizzle-pkg-min|list-min|base-pkg-min|jstorage-pkg-min)/';
+// 新策略的文件转读功能去掉了，没有多少人用
+//$exp = '/(editor-min|editor-core-pkg-min|calendar-pkg-min|editor-pkg-min|editor-plugin-pkg-min|kissy-min|simplecalendar-min|sizzle-pkg-min|list-min|base-pkg-min|jstorage-pkg-min)/';
  
  
 //抓取文件
@@ -98,12 +99,15 @@ foreach ($files as $k){
 		array('/^\//','/\?.+$/'),
 		array('',''),
 		$k);
+	//新策略将-min的文件转读功能去掉了
+	/*
 	if(!preg_match($exp,$k)){		
 		$k = preg_replace(
 			array('/-min\./'),
 			array('.'),
 			$k);
 	}
+ */
  
 	//最后可能是一个逗号
 	if(!preg_match('/(\.js|\.css)$/',$k)){
