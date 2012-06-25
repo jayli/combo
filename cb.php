@@ -16,6 +16,8 @@ $CDN = 'http://assets.taobaocdn.com/'; //如果是在服务器上配置的话，
 // 新策略的文件转读功能去掉了，没有多少人用
 //$exp = '/(editor-min|editor-core-pkg-min|calendar-pkg-min|editor-pkg-min|editor-plugin-pkg-min|kissy-min|simplecalendar-min|sizzle-pkg-min|list-min|base-pkg-min|jstorage-pkg-min)/';
  
+// 线上未找到的文件
+$unfound = array();
  
 //抓取文件
 function get_contents($url){
@@ -154,8 +156,12 @@ foreach ($a_files as $k) {
 		//文件不存在
 		try{
 			//php4不支持try catch，如果基于php4的话，删掉try catch语句
-			$R_files[] = '/***** http://a.tbcdn.cn/'.$k.' *****/';
-			$R_files[] = join('',file($CDN.$k));
+			$R_files[] = '/***** combined from productServer: http://a.tbcdn.cn/'.$k.' *****/';
+			$tfile = file($CDN.$k);
+			if(!$tfile){
+				$unfound[] = 'http://a.tbcdn.cn/'.$k;
+			}
+			$R_files[] = join('',$tfile);
 			//$R_files[] = join('', get_contents($CDN.$k)); //如果apache不支持file抓取远程文件，打开这个注释，然后注释掉上一句
 		}catch(Exception $e){}
     }
@@ -171,4 +177,7 @@ header($header[$type]);
 $result = join("\n",$R_files);
 //输出文件
 echo $result;
+echo "/* non published files:\n";
+echo join("\n",$unfound);
+echo "\n*/";
 ?>
